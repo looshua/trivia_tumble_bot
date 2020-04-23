@@ -1,4 +1,4 @@
-# TriviaTumbleBot (@TriviaTumbleBot on Telegram
+# TriviaTumbleBot (@TriviaTumbleBot on Telegram)
 This bot is designed for answer collation for Trivia Tumble via Telegram, inspired by Quizarium.
 
 ---
