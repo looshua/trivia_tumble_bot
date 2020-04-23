@@ -253,6 +253,8 @@ class PlayerBot:
             "* commands *\n"
             "/join <ID> - joins a session\n"
             "/leave - leave all sessions\n"
+            "/score - check your score for your current session.\n"
+            "/check - check your answers for the current round.\n"
             "\n"
             "* answering questions *\n"
             "Wait for admins to open answering sessions, then simply key in your answers.\n"

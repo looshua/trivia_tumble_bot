@@ -11,12 +11,12 @@ from telegram.ext import (Updater, CommandHandler,
                           CallbackQueryHandler, Filters)
 import player
 import admin
-import token
+import token_file
 from telegram import ReplyKeyboardMarkup
 import logging
 import telegram
 
-TOKEN = token.token
+TOKEN = token_file.token
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)

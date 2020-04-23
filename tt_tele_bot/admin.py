@@ -123,6 +123,7 @@ class MainBot:
         self.get_leave_handler()
         self.get_help_handler()
         self.get_score_handler()
+        self.get_checkscore_handler()
 
     ''' wrapper to create admin user commands '''
 
@@ -398,7 +399,7 @@ class MainBot:
         else:
             markup = ReplyKeyboardMarkup(
                 [["End game"]], one_time_keyboard=True)
-            update.message.reply_text("You have finished the last round.".format(
+            update.message.reply_text("You have finished the last round. Make sure you update the scores and call /zascore to check the scores before ending the game!".format(
                 session.current_round), reply_markup=markup)
 
             return self.END_GAME
@@ -532,6 +533,10 @@ class MainBot:
             context.bot.send_message(chat_id=player.chat_id,
                                      text="The session has ended! You were at {} points! This may not be the final score, so do wait for your admins to confirm it.".format(player.score))
 
+        for idx in range(len(self.sessions)):
+            if self.sessions[idx].ID == session.ID:
+                self.sessions.pop(idx)
+
         update.message.reply_text("Session has ended.")
 
         return ConversationHandler.END
@@ -568,7 +573,7 @@ class MainBot:
                 ],
 
                 self.END_GAME: [MessageHandler(
-                    Filters.regex('(End game)'), self.inc_qn),
+                    Filters.regex('(End game)'), self.end_session),
                 ]
 
             },
@@ -603,6 +608,24 @@ class MainBot:
     def get_leave_handler(self):
         self.leave_handler = CommandHandler('zaleave', self.leaveSession)
 
+    ''' score check callback '''
+    def check_score(self, update, handler):
+        # check if user is already in a session
+        for session in self.sessions:
+            for idx in range(len(session.admins)):
+                if session.admins[idx].chat_id == update.effective_user.id:
+                    score_str = 'Scores for session {}:\n'.format(session.ID)
+
+                    for player in session.players:
+                        score_str += "{}: {}\n".format(player.username, player.score)
+
+                    update.message.reply_text(score_str)
+
+    checkScore = restricted(check_score)
+
+    def get_checkscore_handler(self):
+        self.checkscore_handler = CommandHandler('zascore', self.checkScore)
+
     ''' help callback '''
 
     def get_help(self, update, handler):
@@ -613,6 +636,7 @@ class MainBot:
             "/zajoin <ID> - joins a session \n"
             "/zamanage - manage a session you are currently an active admin in \n"
             "/zaleave - leave all sessions \n"
+            "/zascore - check scores for all sessions you are in.\n"
             "\n"
             "* managing sessions *\n"
             "Use the buttons to navigate between questions and rounds \n"
@@ -667,5 +691,6 @@ class MainBot:
         dp.add_handler(self.leave_handler)
         dp.add_handler(self.session_handler)
         dp.add_handler(self.joiner_handler)
+        dp.add_handler(self.checkscore_handler)
         dp.add_handler(self.score_handler)
         dp.add_handler(self.management_handler)
