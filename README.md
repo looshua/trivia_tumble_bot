@@ -11,10 +11,10 @@ Each session can only have 1 active admin, to prevent double pressing buttons an
 2. Managing a session
 To enter the managing state, the admin needs to be an active admin of a session. The entry point to this conversation is `/zamanage`.
 
-When managing the session, the admin can:\n
-  a. Navigate between questions and rounds\n
-  b. Open and close questions / reviews\n
-  c. Get scores and update scores
+When managing the session, the admin can:
+  1. Navigate between questions and rounds
+  2. Open and close questions / reviews
+  3. Get scores and update scores
 
 Questions and reviews need to be open to enable answering by participants.
 
